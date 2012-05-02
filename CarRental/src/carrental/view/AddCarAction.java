@@ -4,9 +4,9 @@
  */
 package carrental.view;
 
+import carrental.management.RentalManager;
 import carrental.model.Car;
-import carrental.model.ConnectionPool;
-import carrental.model.adapters.CarAdapter;
+import carrental.management.Management;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -34,8 +34,8 @@ public class AddCarAction extends HttpServlet {
         Car car = (Car)request.getAttribute("data");
         
         try {
-            CarAdapter adapter = new CarAdapter(ConnectionPool.getConnection());
-            adapter.addObject(car);
+            RentalManager manager = Management.getManager();
+            manager.addCar(car);
         } catch(Exception ex) {
             throw new ServletException(ex);
         }

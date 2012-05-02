@@ -4,9 +4,9 @@
  */
 package carrental.view;
 
-import carrental.model.ConnectionPool;
+import carrental.management.RentalManager;
 import carrental.model.Customer;
-import carrental.model.adapters.CustomerAdapter;
+import carrental.management.Management;
 import java.io.IOException;
 import java.util.GregorianCalendar;
 import javax.servlet.ServletException;
@@ -23,6 +23,19 @@ public class AddCustomerAction extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Customer customer = (Customer)request.getAttribute("data");
+        prepareCustomer(customer);
+        
+        try {
+            RentalManager manager = Management.getManager();
+            manager.addCustomer(customer);
+        } catch(Exception ex) {
+            throw new ServletException(ex);
+        }
+        
+        response.sendRedirect("index.jsp");
+    }
+
+    private void prepareCustomer(Customer customer) {
         customer.setRegisterDate(new GregorianCalendar());
         
         String idCode = customer.getIdCode();
@@ -38,15 +51,6 @@ public class AddCustomerAction extends HttpServlet {
             
             sb.append(idCode);
             customer.setIdCode(sb.toString());
-        }      
-        
-        try {
-            CustomerAdapter adapter = new CustomerAdapter(ConnectionPool.getConnection());
-            adapter.addObject(customer);
-        } catch(Exception ex) {
-            throw new ServletException(ex);
         }
-        
-        response.sendRedirect("index.jsp");
     }
 }

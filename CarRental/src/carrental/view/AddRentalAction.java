@@ -7,7 +7,7 @@ package carrental.view;
 import carrental.management.RentalManager;
 import carrental.model.Car;
 import carrental.model.Customer;
-import carrental.model.Management;
+import carrental.management.Management;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;

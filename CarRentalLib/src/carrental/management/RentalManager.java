@@ -4,79 +4,45 @@
  */
 package carrental.management;
 
-import carrental.data.DbConnection;
 import carrental.model.Car;
 import carrental.model.CarRental;
 import carrental.model.Customer;
 import carrental.model.adapters.AdapterException;
-import carrental.model.adapters.CarAdapter;
-import carrental.model.adapters.CarRentalAdapter;
-import carrental.model.adapters.CustomerAdapter;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.List;
 
 /**
  *
- * @author ivan
+ * @author Ivan
  */
-public final class RentalManager {
-    private CarAdapter carAdapter;
-    private CustomerAdapter customerAdapter;
-    private CarRentalAdapter rentalAdapter;
-    
-    public RentalManager(DbConnection conn) throws AdapterException {
-        carAdapter = new CarAdapter(conn);
-        customerAdapter = new CustomerAdapter(conn);
-        rentalAdapter = new CarRentalAdapter(conn, carAdapter, customerAdapter);
-    }  
-    
-    public CarRental rent(Customer customer, Car car, int days) throws AdapterException {
-        CarRental rental = new CarRental();
-        rental.setCar(car);
-        rental.setCustomer(customer);
-        rental.setStartDate(new GregorianCalendar());
-        rental.setDays(days);
-        
-        rentalAdapter.addObject(rental);
-        
-        return rental;
-    }
-    
-    public void closeRentalById(int id) throws AdapterException {
-        rentalAdapter.removeObject(id);
-    }
-    
-    public void closeRental(CarRental rental) throws AdapterException {
-        rentalAdapter.removeObject(rental);
-    }
-    
-    public List<CarRental> listRentals() throws SQLException, AdapterException {
-        return rentalAdapter.getObjects();
-    }
-    
-    public List<Car> listCars() throws SQLException, AdapterException {
-        return carAdapter.getObjects();
-    }
+public interface RentalManager {
 
-    public List<Customer> listCustomers() throws SQLException, AdapterException {
-        return customerAdapter.getObjects();
-    }
+    void addCar(Car car) throws RentalManagerException;
+
+    void addCustomer(Customer customer) throws RentalManagerException;
+
+    void closeRental(CarRental rental) throws RentalManagerException;
+
+    void closeRentalById(int id) throws RentalManagerException;
+
+    Car getCarById(int id) throws RentalManagerException;
+
+    Customer getCustomerById(int id) throws RentalManagerException;
+
+    List<Car> listCars() throws RentalManagerException;
+
+    List<Customer> listCustomers() throws RentalManagerException;
+
+    List<CarRental> listRentals() throws RentalManagerException;
+
+    void removeCar(Car car) throws RentalManagerException;
+
+    void removeCar(int id) throws RentalManagerException;
+
+    void removeCustomer(Customer customer) throws RentalManagerException;
+
+    void removeCustomer(int id) throws RentalManagerException;
+
+    CarRental rent(Customer customer, Car car, int days) throws RentalManagerException;
     
-    public Car getCarById(int id) throws SQLException, AdapterException {
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put("ID", id);
-        List<Car> cars = carAdapter.getObjects(params);
-        if(cars.isEmpty())
-            return null;
-        return cars.get(0);        
-    }
-    
-    public Customer getCustomerById(int id) throws SQLException, AdapterException {
-        Map<String, Object> params = new HashMap<String, Object>();
-        params.put("ID", id);
-        List<Customer> customers = customerAdapter.getObjects(params);
-        if(customers.isEmpty())
-            return null;
-        return customers.get(0);        
-    }
 }

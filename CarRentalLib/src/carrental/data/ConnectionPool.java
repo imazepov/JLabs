@@ -2,9 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package carrental.model;
+package carrental.data;
 
-import carrental.data.DbConnection;
 import java.sql.SQLException;
 
 /**

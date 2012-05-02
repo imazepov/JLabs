@@ -4,8 +4,8 @@
  */
 package carrental.view;
 
-import carrental.model.ConnectionPool;
-import carrental.model.adapters.CustomerAdapter;
+import carrental.management.RentalManager;
+import carrental.management.Management;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,10 +21,9 @@ public class RemoveCustomerAction extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            int id = Integer.valueOf(request.getParameter("id"));        
-            CustomerAdapter adapter = new CustomerAdapter(ConnectionPool.getConnection());
-            
-            adapter.removeObject(id);
+            int id = Integer.valueOf(request.getParameter("id"));
+            RentalManager manager = Management.getManager();
+            manager.removeCustomer(id);
         } catch(Exception ex) {
             throw new ServletException(ex);
         }

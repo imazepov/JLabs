@@ -4,8 +4,8 @@
  */
 package carrental.model;
 
+import carrental.management.Management;
 import carrental.management.RentalManager;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,12 +14,13 @@ import java.util.List;
  */
 public class CarModel {
     
-    public List<Car> getCars() {
+    public List<Car> getCars() throws Exception {
         try {        
             RentalManager manager = Management.getManager();        
             return manager.listCars();
         } catch(Exception ex) {
-            return new ArrayList<Car>();
+//            return new ArrayList<Car>();
+            throw ex;
         }
     }
     

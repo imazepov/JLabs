@@ -4,8 +4,8 @@
  */
 package carrental.view;
 
-import carrental.model.ConnectionPool;
-import carrental.model.adapters.CarAdapter;
+import carrental.management.RentalManager;
+import carrental.management.Management;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -22,9 +22,8 @@ public class RemoveCarAction extends HttpServlet {
             throws ServletException, IOException {
         try {
             int id = Integer.valueOf(request.getParameter("id"));        
-            CarAdapter adapter = new CarAdapter(ConnectionPool.getConnection());
-            
-            adapter.removeObject(id);
+            RentalManager manager = Management.getManager();
+            manager.removeCar(id);            
         } catch(Exception ex) {
             throw new ServletException(ex);
         }

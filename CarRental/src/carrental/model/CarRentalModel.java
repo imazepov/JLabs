@@ -5,7 +5,7 @@
 package carrental.model;
 
 import carrental.management.RentalManager;
-import java.util.ArrayList;
+import carrental.management.Management;
 import java.util.List;
 
 /**
@@ -13,12 +13,13 @@ import java.util.List;
  * @author Ivan
  */
 public class CarRentalModel {
-    public List<CarRental> getRentals() {
+    public List<CarRental> getRentals() throws Exception {
         try {
             RentalManager manager = Management.getManager();
             return manager.listRentals();
         } catch(Exception ex) {
-            return new ArrayList<CarRental>();
+//            return new ArrayList<CarRental>();
+            throw ex;
         }
     }
 }

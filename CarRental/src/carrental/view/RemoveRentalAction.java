@@ -5,12 +5,8 @@
 package carrental.view;
 
 import carrental.management.RentalManager;
-import carrental.model.ConnectionPool;
-import carrental.model.Management;
-import carrental.model.adapters.CarRentalAdapter;
-import carrental.model.adapters.CustomerAdapter;
+import carrental.management.Management;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
