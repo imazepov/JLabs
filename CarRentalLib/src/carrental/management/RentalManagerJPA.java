@@ -13,13 +13,7 @@ import carrental.model.jpa.adapters.CustomerAdapter;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.*;
 
 /**
  *
@@ -40,14 +34,18 @@ public class RentalManagerJPA implements RentalManager {
     public void addCar(Car car) throws RentalManagerException {
         carrental.model.jpa.entities.Car carEntity = CarAdapter.convertCarToEntity(car);
         
-        persistObject(carEntity);
+        persistObject(carEntity, true);
+        
+        car.setId(carEntity.getId());
     }
 
     @Override
     public void addCustomer(Customer customer) throws RentalManagerException {
         carrental.model.jpa.entities.Customer customerEntity = CustomerAdapter.convertCustomerToEntity(customer);
         
-        persistObject(customerEntity);
+        persistObject(customerEntity, true);
+        
+        customer.setId(customerEntity.getId());
     }
 
     @Override
@@ -150,22 +148,25 @@ public class RentalManagerJPA implements RentalManager {
         entity.setDays(days);
         entity.setStartDate(new GregorianCalendar().getTime());
         
-        persistObject(entity);
+        persistObject(entity, true);
         
         return CarRentalAdapter.convertEntityToCarRental(entity);
+    }
+    
+    @Override
+    public void updateCustomer(Customer customer) throws RentalManagerException {
+        carrental.model.jpa.entities.Customer entity = CustomerAdapter.convertCustomerToEntity(customer);
+        persistObject(entity, false);
     }
 
     private <T> List<T> fetchAllObjects(Class<T> type) {
         EntityManager entityManager = null;
         
-        try{
+        try {
             entityManager = getEntityManager();
+            Query q = entityManager.createNamedQuery(type.getSimpleName() + ".findAll");
             
-            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-            CriteriaQuery<T> q = cb.createQuery(type);
-            TypedQuery<T> tq = entityManager.createQuery(q);
-            
-            return tq.getResultList();
+            return q.getResultList();
         } finally {
             if(entityManager != null)
                 entityManager.close();
@@ -183,16 +184,22 @@ public class RentalManagerJPA implements RentalManager {
         }        
     }
     
-    private void persistObject(Object obj) throws RentalManagerException {
+    private void persistObject(Object obj, boolean newRecord) throws RentalManagerException {
         EntityManager entityManager = null;
         EntityTransaction transaction = null;
         
         try {
             entityManager = getEntityManager();
+            if(!newRecord)
+                obj = entityManager.merge(obj);
+            
             transaction = entityManager.getTransaction();
             transaction.begin();
             
-            entityManager.persist(obj);
+            if(newRecord)
+                entityManager.persist(obj);
+            else
+                entityManager.refresh(obj);            
             
             transaction.commit();
         } catch (Exception ex) {

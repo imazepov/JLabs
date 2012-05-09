@@ -7,8 +7,6 @@ package carrental.management;
 import carrental.model.Car;
 import carrental.model.CarRental;
 import carrental.model.Customer;
-import carrental.model.adapters.AdapterException;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -44,5 +42,7 @@ public interface RentalManager {
     void removeCustomer(int id) throws RentalManagerException;
 
     CarRental rent(Customer customer, Car car, int days) throws RentalManagerException;
+
+    public void updateCustomer(Customer customer) throws RentalManagerException;
     
 }

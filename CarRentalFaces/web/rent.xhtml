@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Rent a car</title>
+    </h:head>
+    <h:body>
+        <h:outputText><h1>Rent a car</h1></h:outputText>
+        <h:form>
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Car:"/>
+                <h:selectOneListbox value="#{rental.carRental.car}"
+                                 label="Car" title="Car" required="true">
+                    <f:selectItems value="#{cars.selection}"/>                    
+                </h:selectOneListbox>
+                
+                <h:outputLabel value="# of days:"/>
+                <h:inputText value="#{rental.carRental.days}" label="# of days" required="true"/>
+                
+                <h:outputLabel value="First name:"/>
+                <h:inputText value="#{rental.customer.firstName}" label="First name" required="true"/>
+                
+                <h:outputLabel value="Last name:"/>
+                <h:inputText value="#{rental.customer.lastName}" label="Last name" required="true"/>
+                
+                <h:outputLabel value="ID code:"/>
+                <h:inputText value="#{rental.customer.idCode}" label="ID code" maxlength="20" required="true"/>
+                
+                <h:commandButton label="Rent" value="Rent" action="#{rental.addRental}"/>
+            </h:panelGrid>
+        </h:form>
+    </h:body>
+</html>
+

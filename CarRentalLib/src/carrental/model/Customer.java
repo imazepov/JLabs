@@ -33,9 +33,6 @@ public class Customer extends Model {
     }
 
     public void setIdCode(String idCode) {
-//        if(idCode.length() != 20) {
-//            throw new InvalidParameterException();
-//        }
         this.idCode = idCode;
     }
 
@@ -48,6 +45,9 @@ public class Customer extends Model {
     }
 
     public Calendar getRegisterDate() {
+        if(registerDate == null)
+            return null;
+        
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTimeInMillis(registerDate.getTime());        
         return cal;

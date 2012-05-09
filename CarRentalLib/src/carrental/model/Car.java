@@ -45,4 +45,8 @@ public class Car extends Model {
     public void setYear(int year) {
         this.year = year;
     }
+    
+    public String toString() {
+        return String.format("%s %s %4d", make, model, year);
+    }
 }

@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Car rentals</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <h:dataTable value="#{rental.rentalModel}" var="item" cellspacing="2" cellpadding="3">
+                <h:column>
+                    <f:facet name="header">Customer</f:facet>
+                    <h:commandLink value="#{item.customer.firstName}&nbsp;#{item.customer.lastName}"
+                                action="#{rental.prepareEditCustomer}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Car</f:facet>
+                    <h:outputText value="#{item.car}" converter="toString"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Start date</f:facet>
+                    <h:outputText value="#{item.startDate.time}">
+                        <f:convertDateTime pattern="dd.MM.yyyy"/>
+                    </h:outputText>                    
+                </h:column>
+                <h:column>
+                    <f:facet name="header"># of days</f:facet>
+                    #{item.days}
+                </h:column>
+                <h:column>                    
+                    <h:commandLink value="Close" action="#{rental.closeRental}"/>
+                </h:column>
+            </h:dataTable>
+            
+            <h:commandButton value="Rent a car" action="#{rental.prepareAddRental}"/>
+        </h:form>
+    </h:body>
+</html>
+

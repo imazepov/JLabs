@@ -12,7 +12,6 @@ import carrental.model.adapters.AdapterException;
 import carrental.model.adapters.CarAdapter;
 import carrental.model.adapters.CarRentalAdapter;
 import carrental.model.adapters.CustomerAdapter;
-import java.sql.SQLException;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -184,6 +183,15 @@ public final class RentalManagerJDBC implements RentalManager {
     public void removeCustomer(int id) throws RentalManagerException {
         try {
             customerAdapter.removeObject(id);
+        } catch (AdapterException ex) {
+            throw new RentalManagerException(ex);
+        }
+    }
+
+    @Override
+    public void updateCustomer(Customer customer) throws RentalManagerException {
+        try {
+            customerAdapter.saveObject(customer);
         } catch (AdapterException ex) {
             throw new RentalManagerException(ex);
         }
