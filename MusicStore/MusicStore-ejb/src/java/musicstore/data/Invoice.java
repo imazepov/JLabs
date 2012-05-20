@@ -7,26 +7,14 @@ package musicstore.data;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author ivan
+ * @author Ivan
  */
 @Entity
 @Table(name = "Invoice")
@@ -34,10 +22,12 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Invoice.findAll", query = "SELECT i FROM Invoice i"),
     @NamedQuery(name = "Invoice.findById", query = "SELECT i FROM Invoice i WHERE i.id = :id"),
-    @NamedQuery(name = "Invoice.findByDate", query = "SELECT i FROM Invoice i WHERE i.date = :date")})
+    @NamedQuery(name = "Invoice.findByDate", query = "SELECT i FROM Invoice i WHERE i.date = :date"),
+    @NamedQuery(name = "Invoice.findBySubmitted", query = "SELECT i FROM Invoice i WHERE i.submitted = :submitted")})
 public class Invoice implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID")
@@ -47,10 +37,11 @@ public class Invoice implements Serializable {
     @Column(name = "Date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
-    @JoinTable(name = "InvoiceArticle", joinColumns = {
-        @JoinColumn(name = "InvoiceID", referencedColumnName = "ID")}, inverseJoinColumns = {
-        @JoinColumn(name = "ArticleID", referencedColumnName = "ID")})
-    @ManyToMany
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Submitted")
+    private boolean submitted;
+    @ManyToMany(mappedBy = "invoiceList")
     private List<Article> articleList;
     @JoinColumn(name = "CustomerID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
@@ -63,9 +54,10 @@ public class Invoice implements Serializable {
         this.id = id;
     }
 
-    public Invoice(Integer id, Date date) {
+    public Invoice(Integer id, Date date, boolean submitted) {
         this.id = id;
         this.date = date;
+        this.submitted = submitted;
     }
 
     public Integer getId() {
@@ -82,6 +74,14 @@ public class Invoice implements Serializable {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public boolean getSubmitted() {
+        return submitted;
+    }
+
+    public void setSubmitted(boolean submitted) {
+        this.submitted = submitted;
     }
 
     @XmlTransient

@@ -6,18 +6,7 @@ package musicstore.data;
 
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -25,7 +14,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author ivan
+ * @author Ivan
  */
 @Entity
 @Table(name = "SiteUser")
@@ -47,10 +36,7 @@ public class SiteUser implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "Passw")
     private String passw;
-    @JoinTable(name = "SiteUserRole", joinColumns = {
-        @JoinColumn(name = "UserLogin", referencedColumnName = "Login")}, inverseJoinColumns = {
-        @JoinColumn(name = "RoleName", referencedColumnName = "Name")})
-    @ManyToMany
+    @ManyToMany(mappedBy = "siteUserList")
     private List<SiteRole> siteRoleList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "siteUser")
     private Customer customer;

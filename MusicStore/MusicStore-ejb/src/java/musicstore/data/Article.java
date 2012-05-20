@@ -6,17 +6,7 @@ package musicstore.data;
 
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -24,7 +14,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author ivan
+ * @author Ivan
  */
 @Entity
 @Table(name = "Article")
@@ -33,10 +23,12 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Article.findAll", query = "SELECT a FROM Article a"),
     @NamedQuery(name = "Article.findById", query = "SELECT a FROM Article a WHERE a.id = :id"),
     @NamedQuery(name = "Article.findByName", query = "SELECT a FROM Article a WHERE a.name = :name"),
-    @NamedQuery(name = "Article.findByPhotoFileName", query = "SELECT a FROM Article a WHERE a.photoFileName = :photoFileName")})
+    @NamedQuery(name = "Article.findByPhotoFileName", query = "SELECT a FROM Article a WHERE a.photoFileName = :photoFileName"),
+    @NamedQuery(name = "Article.findByPrice", query = "SELECT a FROM Article a WHERE a.price = :price")})
 public class Article implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID")
@@ -55,7 +47,14 @@ public class Article implements Serializable {
     @Size(min = 1, max = 65535)
     @Column(name = "Description")
     private String description;
-    @ManyToMany(mappedBy = "articleList")
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Price")
+    private float price;
+    @JoinTable(name = "InvoiceArticle", joinColumns = {
+        @JoinColumn(name = "ArticleID", referencedColumnName = "ID")}, inverseJoinColumns = {
+        @JoinColumn(name = "InvoiceID", referencedColumnName = "ID")})
+    @ManyToMany
     private List<Invoice> invoiceList;
     @JoinColumn(name = "CategoryID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
@@ -68,10 +67,11 @@ public class Article implements Serializable {
         this.id = id;
     }
 
-    public Article(Integer id, String name, String description) {
+    public Article(Integer id, String name, String description, float price) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.price = price;
     }
 
     public Integer getId() {
@@ -104,6 +104,14 @@ public class Article implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
     }
 
     @XmlTransient

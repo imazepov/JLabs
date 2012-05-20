@@ -10,5 +10,5 @@
         <property name="URL" value="jdbc:mysql://localhost:3306/MusicStore"/>
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>
     </jdbc-connection-pool>
-    <jdbc-resource enabled="true" jndi-name="MusicStore" object-type="user" pool-name="mysql_MusicStore_musicstorePool"/>
+    <jdbc-resource enabled="true" jndi-name="MusicStore" object-type="user" pool-name="mysql_MusicStore_musicstorePool"/>    
 </resources>
