@@ -22,13 +22,19 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Category.findAll", query = "SELECT c FROM Category c"),
     @NamedQuery(name = "Category.findById", query = "SELECT c FROM Category c WHERE c.id = :id"),
-    @NamedQuery(name = "Category.findByName", query = "SELECT c FROM Category c WHERE c.name = :name")})
+    @NamedQuery(name = "Category.findByName", query = "SELECT c FROM Category c WHERE c.name = :name"),
+    @NamedQuery(name = "Category.findByVisible", query = "SELECT c FROM Category c WHERE c.visible = :visible")
+})
 public class Category implements Serializable {
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Visible")
+    private boolean visible;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @NotNull
+//    @Basic(optional = false)
+//    @NotNull
     @Column(name = "ID")
     private Integer id;
     @Basic(optional = false)
@@ -99,6 +105,14 @@ public class Category implements Serializable {
     @Override
     public String toString() {
         return "musicstore.data.Category[ id=" + id + " ]";
+    }
+
+    public boolean getVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
     
 }

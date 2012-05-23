@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:composition template="base.xhtml">
+        <ui:define name="title">Оформить заказ</ui:define>
+        
+        <ui:define name="content">
+            <center>
+            <div>
+            <h3>Ваш заказ:</h3>
+                <ui:repeat value="#{shopping.invoiceArticles}" var="articleRecord" varStatus="status">
+                    <li>
+                        <h:outputText value="#{articleRecord.article.name}"/><br/>
+                        <h:outputText value="#{articleRecord.count}"/> x <h:outputText value="#{articleRecord.article.price}"/>&nbsp;грн<br/>                        
+                    </li>
+                </ui:repeat>
+            <h5>Общая сумма: <h:outputText value="#{shopping.invoiceTotal}"/> грн</h5>
+            </div>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="Телефон:"/>
+                    <h:inputText id="phone" value="#{submit.phone}" required="true"/>
+                    <h:outputText value="Адрес доставки:"/>
+                    <h:inputTextarea id="address" value="#{submit.address}" required="true"/>
+                    <h:commandButton value="Отправить заказ" action="#{submit.submit}"/>
+                    <h:commandButton value="Очистить" type="reset"/>
+                </h:panelGrid>
+            </h:form>
+            </center>
+        </ui:define>
+    </ui:composition>
+</html>
+

@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:composition template="base.xhtml">
+        <ui:define name="title">Регистрация</ui:define>
+        <ui:define name="content">
+            <script type="text/javascript">
+                function checkForm() {
+                    pwd = document.getElementById("registerForm:password").value;
+                    pwd2 = document.getElementById("registerForm:repeatPassword").value;
+                    if (pwd != pwd2) {
+                        alert('Пароли должны совпадать');
+                        return false;
+                    }
+                    
+                    return true;
+                }
+            </script>
+            
+            <h:form id="registerForm">
+                <center>
+                    <h:messages></h:messages>
+                    <h:panelGrid columns="2">                    
+                        <h:outputLabel value="Логин:"/>                    
+                        <h:inputText id="login" value="#{registration.login}" />
+                        <h:outputLabel value="Пароль:"/>
+                        <h:inputSecret id="password" value="#{registration.password}" validatorMessage="Пароль от 4 до 32 символов">
+                            <f:validateLength minimum="4" maximum="32"/>
+                        </h:inputSecret>
+                        <h:outputLabel value="Пароль еще раз:"/>
+                        <h:inputSecret id="repeatPassword"/>
+                        <h:outputLabel value="Имя:"/>
+                        <h:inputText id="name" value="#{registration.name}"/>
+                        <h:outputLabel value="E-Mail:"/>
+                        <h:inputText id="email" value="#{registration.email}" validatorMessage="Неверный формат E-Mail">
+                            <f:validateRegex pattern="[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"/>
+                        </h:inputText>
+                        <h:outputLabel value="Телефон:"/>
+                        <h:inputText id="phone" value="#{registration.phone}"/> 
+                        <h:commandButton value="Зарегистрироваться" action="#{registration.register}" onclick="return checkForm();"/>
+                        <h:commandButton value="Очистить" type="reset"/>
+                    </h:panelGrid>   
+                </center>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
+

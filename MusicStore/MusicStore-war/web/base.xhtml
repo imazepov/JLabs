@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link href="./resources/css/default.css" rel="stylesheet" type="text/css" />
+        <link href="./resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
+        <title><ui:insert name="title">Musical instrument store</ui:insert></title>
+    </h:head>
+
+    <h:body>
+
+        <div id="top">
+            <h:messages></h:messages>
+            <div>
+                <c:if test="#{login.isLoggedIn}">
+                    Добро пожаловать, 
+                    <c:if test="#{login.loggedInUser.customer != null}">
+                        <h:outputText value="#{login.loggedInUser.customer.name}"/>!
+                    </c:if>
+                    <c:if test="#{login.loggedInUser.customer == null}">
+                        <h:outputText value="#{login.loggedInUser.login}"/>!
+                    </c:if>
+                    &nbsp;&nbsp;
+                    <h:form>
+                        <h:commandLink action="#{login.logout}" value="Выйти"/>
+                    </h:form>
+                </c:if>
+                <c:if test="#{!login.isLoggedIn}">
+                    <h:form>
+                        <h:link outcome="/login.xhtml" value="Войти"/>
+                        &nbsp;|&nbsp;
+                        <h:link outcome="register.xhtml" value="Зарегистрироваться"/>
+                    </h:form>
+                </c:if>
+            </div>
+            <ui:insert name="top"></ui:insert>
+        </div>
+        <div>
+            <div id="left">
+                
+                <ul>
+                    <c:forEach items="#{shopping.categories}" var="category">
+                        <li>
+                            <h:link value="#{category.name}" outcome="/index.xhtml">
+                                <f:param name="category" value="#{category.id}"/>                                
+                            </h:link>
+                            
+                            <c:if test="#{admin.isAllowed}">                                
+                                <h:form>
+                                    <h:commandLink value=" Удалить" action="#{admin.removeCategory}">
+                                        <f:setPropertyActionListener target="#{admin.categoryToRemove}" value="#{category.id}"/>
+                                    </h:commandLink>
+                                        <br/><br/>
+                                    
+                                </h:form>
+                            </c:if>
+                        </li>
+                    </c:forEach>
+                    
+                    <c:if test="#{admin.isAllowed}">
+                        <h:form>
+                            <h:outputText value="Новая категория:"/><br/>
+                            <h:inputText id="name" value="#{admin.categoryName}" size="13"/>
+                            <h:commandButton value="Добавить" action="#{admin.addCategory}" />
+                        </h:form>
+                    </c:if>
+                </ul>
+                <ui:insert name="left"></ui:insert>
+            </div>
+            <div>
+                <h:form>
+                    <div id="right">
+                        <h4>Ваш заказ:</h4>
+                        <ui:repeat value="#{shopping.invoiceArticles}" var="articleRecord" varStatus="status">
+                            <li>
+                                <h:outputText value="#{articleRecord.article.name}"/><br/>
+                                <h:outputText value="#{articleRecord.count}"/> x <h:outputText value="#{articleRecord.article.price}"/>&nbsp;грн<br/>
+                                <h:commandLink value="Удалить" action="#{shopping.removeFromCart}">
+                                    <f:param name="article" value="#{articleRecord.article.id}"/>
+                                </h:commandLink>
+                            </li>
+                        </ui:repeat>
+                        <h:commandLink value="Очистить корзину" action="#{shopping.clearCart}"/>
+                        <br/>
+                        <h:link value="Оформить заказ" outcome="/submit.xhtml"/>
+                        <ui:insert name="right"></ui:insert>
+                    </div>
+                </h:form>
+                <div id="content" class="right_content">
+                    <ui:insert name="content">Content</ui:insert>
+                </div>
+            </div>
+        </div>        
+    </h:body>
+
+</html>

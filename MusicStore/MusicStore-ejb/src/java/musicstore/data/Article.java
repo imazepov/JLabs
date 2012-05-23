@@ -24,13 +24,20 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Article.findById", query = "SELECT a FROM Article a WHERE a.id = :id"),
     @NamedQuery(name = "Article.findByName", query = "SELECT a FROM Article a WHERE a.name = :name"),
     @NamedQuery(name = "Article.findByPhotoFileName", query = "SELECT a FROM Article a WHERE a.photoFileName = :photoFileName"),
-    @NamedQuery(name = "Article.findByPrice", query = "SELECT a FROM Article a WHERE a.price = :price")})
+    @NamedQuery(name = "Article.findByPrice", query = "SELECT a FROM Article a WHERE a.price = :price"),
+    @NamedQuery(name = "Article.findByVisible", query = "SELECT a FROM Article a WHERE a.visible = :visible"),
+    @NamedQuery(name = "Article.findByCategory", query = "SELECT a FROM Article a WHERE a.category.id = :categoryId")
+})
 public class Article implements Serializable {
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Visible")
+    private boolean visible;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @NotNull
+//    @Basic(optional = false)
+//    @NotNull
     @Column(name = "ID")
     private Integer id;
     @Basic(optional = false)
@@ -154,6 +161,14 @@ public class Article implements Serializable {
     @Override
     public String toString() {
         return "musicstore.data.Article[ id=" + id + " ]";
+    }
+
+    public boolean getVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
     
 }

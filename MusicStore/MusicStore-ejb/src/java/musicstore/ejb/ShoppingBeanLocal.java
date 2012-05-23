@@ -17,8 +17,19 @@ import musicstore.data.Invoice;
 public interface ShoppingBeanLocal {
     
     void addItem(Customer customer, Article item);
+    void addItem(String sessionId, Article item);
     void removeItem(Customer customer, Article item);
+    void removeItem(String sessionId, Article item);
 
-    void submitOrder(Customer customer);
+    void assignCustomerToOrder(Customer customer, String sessionId);
+    
+    void submitOrder(Customer customer, String phone, String address);
+    void discardOrder(String sessionId);
+    
     Invoice getOrder(Customer customer);
+    Invoice getOrder(String sessionId);
+
+    void createOrder(String sessionId);
+
+    boolean hasCustomerOrder(Customer customer);
 }

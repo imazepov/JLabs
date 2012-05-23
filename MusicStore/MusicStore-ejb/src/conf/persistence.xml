@@ -2,7 +2,13 @@
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
   <persistence-unit name="MusicStore" transaction-type="JTA">
     <jta-data-source>MusicStore</jta-data-source>
-    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <class>musicstore.data.Article</class>
+    <class>musicstore.data.Category</class>
+    <class>musicstore.data.Customer</class>
+    <class>musicstore.data.Invoice</class>
+    <class>musicstore.data.SiteRole</class>
+    <class>musicstore.data.SiteUser</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties/>
   </persistence-unit>
 </persistence>

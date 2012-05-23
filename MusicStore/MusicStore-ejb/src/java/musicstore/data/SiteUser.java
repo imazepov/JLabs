@@ -22,8 +22,15 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "SiteUser.findAll", query = "SELECT s FROM SiteUser s"),
     @NamedQuery(name = "SiteUser.findByLogin", query = "SELECT s FROM SiteUser s WHERE s.login = :login"),
-    @NamedQuery(name = "SiteUser.findByPassw", query = "SELECT s FROM SiteUser s WHERE s.passw = :passw")})
+    @NamedQuery(name = "SiteUser.findByPassw", query = "SELECT s FROM SiteUser s WHERE s.passw = :passw"),
+    @NamedQuery(name = "SiteUser.countByLogin", query = "SELECT COUNT(s) FROM SiteUser s WHERE s.login = :login")
+})
 public class SiteUser implements Serializable {
+    @JoinTable(name = "SiteUserRole", joinColumns = {
+        @JoinColumn(name = "Login", referencedColumnName = "Login")}, inverseJoinColumns = {
+        @JoinColumn(name = "RoleName", referencedColumnName = "Name")})
+    @ManyToMany
+    private List<SiteRole> siteRoleList;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -36,8 +43,6 @@ public class SiteUser implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "Passw")
     private String passw;
-    @ManyToMany(mappedBy = "siteUserList")
-    private List<SiteRole> siteRoleList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "siteUser")
     private Customer customer;
 

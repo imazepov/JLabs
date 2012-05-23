@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "SiteRole.findAll", query = "SELECT s FROM SiteRole s"),
     @NamedQuery(name = "SiteRole.findByName", query = "SELECT s FROM SiteRole s WHERE s.name = :name")})
 public class SiteRole implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
